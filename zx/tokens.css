@@ -1,0 +1,93 @@
+/* ============================================================
+ * 设计语言基础：墨 · 纸 · 印 —— Visual Tokens
+ * 统一设计提案 V1.0 落地，六套系统共用。
+ * ============================================================ */
+
+:root {
+  /* ---- 色彩 COLOR ---- */
+  --zx-paper: #F6F3EC;      /* 纸 · 页面背景：所有页面的基底 */
+  --zx-ink: #26231F;        /* 墨 · 文字与深色导航：顶栏、导航、正文 */
+  --zx-seal: #B03A2A;       /* 印 · 主行动与强调：主按钮、选中态 */
+  --zx-dai: #31565E;        /* 黛 · 信息与链接：图表主色、文字链接 */
+  --zx-moss: #3E7C4F;       /* 苔 · 成功与通过：审核通过、已完成 */
+  --zx-ochre: #A9762B;      /* 赭 · 警示与待办：待审核、低库存预警 */
+
+  /* 墨的层次（由 --zx-ink 派生的灰阶，保持纸墨气质） */
+  --zx-ink-2: #55504A;      /* 次要文字 */
+  --zx-ink-3: #8A847B;      /* 辅助说明 · 次要信息 */
+  --zx-line: #E4DFD3;       /* 分隔线（纸上的浅墨线） */
+  --zx-card: #FFFFFF;       /* 卡片底 */
+
+  /* 状态浅底（标签/徽章用，全圆角） */
+  --zx-seal-soft: #F3E2DE;
+  --zx-dai-soft: #E2EBED;
+  --zx-moss-soft: #E3EEE6;
+  --zx-ochre-soft: #F2EADB;
+
+  /* 系统识别色（仅用于徽章与数据标签，顶栏导航保持墨色） */
+  --zx-sys-yj: #B03A2A;     /* 业绩登记 · 印 */
+  --zx-sys-quan: #A9762B;   /* 券类管理 · 赭 */
+  --zx-sys-jz: #31565E;     /* 教资报名 · 黛 */
+  --zx-sys-sf: #3E7C4F;     /* 评测报告 · 苔 */
+  --zx-sys-wms: #2E4057;    /* 仓库管理 · 深蓝 */
+  --zx-sys-zc: #7A4E2D;     /* 固定资产 · 棕 */
+
+  /* 角色徽标色 */
+  --zx-role-admin: #B03A2A;   /* 超级管理员 */
+  --zx-role-master: #31565E;  /* 校区校长 */
+  --zx-role-teacher: #3E7C4F; /* 任课教师 */
+  --zx-role-finance: #A9762B; /* 财务 */
+  --zx-role-superadmin: var(--zx-role-admin);
+  --zx-role-principal: var(--zx-role-master);
+
+  /* ---- 字体 TYPE ---- */
+  --zx-font-display: "Noto Serif SC", "Songti SC", "STSong", serif;   /* 标题字：页面标题、看板大标 */
+  --zx-font-body: "MiSans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; /* 正文字：界面正文、数据与表单 */
+
+  /* 字级阶梯 */
+  --zx-fs-figure: 28px;   /* 数据大字 · 看板数字 */
+  --zx-fs-title: 20px;    /* 页面标题 · 宋体加粗 */
+  --zx-fs-section: 15px;  /* 区块标题 · 卡片标题 */
+  --zx-fs-body: 13px;     /* 正文 · 表单与列表 */
+  --zx-fs-caption: 11px;  /* 辅助说明 · 次要信息 */
+
+  /* ---- 形状与空间 SPACE ---- */
+  --zx-radius-card: 12px;
+  --zx-radius-ctrl: 8px;
+  --zx-radius-tag: 999px;   /* 标签全圆角 */
+
+  /* 8pt 网格 */
+  --zx-sp-1: 8px;    /* 元素间距 */
+  --zx-sp-2: 16px;   /* 卡片内边距 */
+  --zx-sp-3: 24px;   /* 区块间距 */
+  --zx-sp-4: 32px;   /* 页面分节 */
+
+  /* 阴影仅两档：浮层（弹窗、抽屉、拖影）始终高于卡片一档 */
+  --zx-shadow-card: 0 1px 2px rgba(38, 35, 31, .06), 0 2px 8px rgba(38, 35, 31, .05);
+  --zx-shadow-float: 0 4px 12px rgba(38, 35, 31, .12), 0 12px 32px rgba(38, 35, 31, .14);
+
+  /* ---- 骨架尺寸 ---- */
+  --zx-topbar-h: 52px;
+  --zx-sidebar-w: 208px;
+  --zx-tabbar-h: 56px;      /* 移动端底部标签栏 */
+  --zx-breakpoint: 768px;
+
+  /* 动效：非用户触发的动效极简，一处编排好的入场 */
+  --zx-ease: cubic-bezier(.22, .8, .32, 1);
+  --zx-dur: .24s;
+}
+
+/* 深色面（顶栏/侧导航/摘要条共用墨色） */
+:root {
+  --zx-dark-bg: #26231F;
+  --zx-dark-bg-2: #2F2B26;   /* 深色面上的悬浮/分组 */
+  --zx-dark-text: #EDE9E0;
+  --zx-dark-text-2: #A39C90;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
