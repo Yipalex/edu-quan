@@ -55,7 +55,8 @@ body {
 .zx-sys-switch__btn .zx-caret { font-size: 10px; color: var(--zx-dark-text-2); }
 
 .zx-sys-switch__menu {
-  position: absolute; top: calc(100% + 8px); left: 0; min-width: 240px;
+  /* 切换器在顶栏右侧，菜单右对齐，避免溢出屏幕 */
+  position: absolute; top: calc(100% + 8px); right: 0; left: auto; min-width: 240px;
   background: var(--zx-card); color: var(--zx-ink);
   border-radius: var(--zx-radius-card);
   box-shadow: var(--zx-shadow-float);
