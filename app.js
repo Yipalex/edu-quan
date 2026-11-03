@@ -1,7 +1,7 @@
 /* SSO_TOKEN_CATCH：接收工作台「切换系统」跳转携带的令牌，写入本地登录态 */
 try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk) { localStorage.setItem('zb_token', _ssoTk); history.replaceState(null, '', location.pathname + (location.hash || '')); } } catch (_) {}
 /* ============================================================
-   教培机构 · 券类管理系统 — 应用主逻辑
+   泽曦书画 · 券类管理系统 — 应用主逻辑
    角色：老师（核销） / 管理员=教务运营（全部） / 家长（只读查询）
    所有写操作通过 SECURITY DEFINER 安全函数收口，前端无法直接改账
    ============================================================ */
@@ -15,7 +15,7 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
   })
 
   const WEEK = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
-  const CAMPUS = ['城东校区', '城西校区', '海东', '麻章', '开发区']
+  const CAMPUS = ['赤坎金城', '霞山社坛', '海东', '麻章', '开发区']
 
   /* ==================== 全局状态 ==================== */
   const state = {
@@ -172,12 +172,12 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
 
   /* ==================== 统一骨架（墨·纸·印 shell） ==================== */
   const ZX_SYSTEMS = [
-    { id: 'yj',   name: '业绩登记系统', domain: 'yj.example.com',   color: 'var(--zx-sys-yj)',   url: 'https://yj.example.com/' },
-    { id: 'quan', name: '券类管理系统', domain: 'quan.example.com', color: 'var(--zx-sys-quan)', url: 'https://quan.example.com/' },
-    { id: 'jz',   name: '教资报名系统', domain: 'jz.example.com',   color: 'var(--zx-sys-jz)',   url: 'https://jz.example.com/' },
-    { id: 'sf',   name: '评测报告系统', domain: 'sf.example.com',   color: 'var(--zx-sys-sf)',   url: 'https://sf.example.com/' },
-    { id: 'wms',  name: '仓库管理系统', domain: 'wms.example.com',  color: 'var(--zx-sys-wms)',  url: 'https://wms.example.com/' },
-    { id: 'zc',   name: '固定资产管理', domain: 'zc.example.com',   color: 'var(--zx-sys-zc)',   url: 'https://zc.example.com/' },
+    { id: 'yj',   name: '业绩登记系统', domain: 'yj.zexishuhua.com',   color: 'var(--zx-sys-yj)',   url: 'https://yj.zexishuhua.com/' },
+    { id: 'quan', name: '券类管理系统', domain: 'quan.zexishuhua.com', color: 'var(--zx-sys-quan)', url: 'https://quan.zexishuhua.com/' },
+    { id: 'jz',   name: '教资报名系统', domain: 'jz.zexishuhua.com',   color: 'var(--zx-sys-jz)',   url: 'https://jz.zexishuhua.com/' },
+    { id: 'sf',   name: '评测报告系统', domain: 'sf.zexishuhua.com',   color: 'var(--zx-sys-sf)',   url: 'https://sf.zexishuhua.com/' },
+    { id: 'wms',  name: '仓库管理系统', domain: 'wms.zexishuhua.com',  color: 'var(--zx-sys-wms)',  url: 'https://wms.zexishuhua.com/' },
+    { id: 'zc',   name: '固定资产管理', domain: 'zc.zexishuhua.com',   color: 'var(--zx-sys-zc)',   url: 'https://zc.zexishuhua.com/' },
   ]
   /* 角色显隐沿用现有逻辑：teacher 仅核销相关；admin/superadmin 全部可见 */
   const QUAN_NAV = [
@@ -201,7 +201,7 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
     if (zxShellReady || !state.staff) return
     zxShellReady = true
     ZXShell.init({
-      brand: { name: '教培机构', logo: null },
+      brand: { name: '泽曦书画', logo: 'img/zexi-logo.png' },
       systems: ZX_SYSTEMS,
       currentSystem: 'quan',
       nav: QUAN_NAV,
@@ -268,8 +268,8 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
     $app.innerHTML = `
       <div class="auth-wrap">
         <div class="auth-hero">
-          <div class="seal seal-lg">泽</div>
-          <h1>教培机构</h1>
+          <img class="seal seal-lg" src="img/zexi-logo.png" alt="泽曦书画">
+          <h1>泽曦书画</h1>
           <p>券 类 管 理 系 统</p>
         </div>
         <div class="card card-pad">
@@ -734,7 +734,7 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
           <div class="section-title"><h3>批量发放</h3><span class="hint">从 Excel 复制粘贴，每行：姓名,手机号,张数</span></div>
           <div class="card card-pad">
             <div class="field"><label>发放名单</label>
-              <textarea id="vb-text" rows="6" placeholder="张三,13800000000,2&#10;李四,13800000000,1">${esc(prevText)}</textarea></div>
+              <textarea id="vb-text" rows="6" placeholder="张三,13800001234,2&#10;李四,13900005678,1">${esc(prevText)}</textarea></div>
             <div class="field"><label>批次备注（选填，记录到每一张券）</label><input id="vb-note" placeholder="例如：春季活动奖励" value="${esc(prevNote)}"></div>
             <div class="sheet-actions" style="justify-content:flex-start">
               <button class="btn btn-ghost btn-sm" id="vb-preview">预览名单</button>
@@ -1401,7 +1401,7 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
         ${classSection('硬笔', '硬笔体系班级')}
         ${classSection('毛笔', '毛笔体系班级')}
         <div class="section-title" style="margin-top:26px"><h3>课程体系档位参考</h3><span class="hint">定价依据，建班时按档位带入</span></div>
-        ${tierSection('硬笔', '硬笔课程体系 · 档位一览', '教培机构课程体系一览表（教材另扣费）')}
+        ${tierSection('硬笔', '硬笔课程体系 · 档位一览', '泽曦书画课程体系一览表（教材另扣费）')}
         ${tierSection('毛笔', '毛笔课程体系 · 档位一览', '毛笔课程体系校长名师收费表')}`, 'classes')
 
       document.getElementById('cls-add').onclick = () => openClass(null)
@@ -1715,7 +1715,7 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
         <div class="parent-hero">
           <div class="seal seal-lg" style="margin:0 auto">泽</div>
           <h1 style="font-family:var(--ff-serif);font-size:1.35rem;letter-spacing:.2em;margin-top:16px">名师课余额查询</h1>
-          <p style="color:var(--ink-faint);font-size:.8rem;margin-top:6px;letter-spacing:.1em">教培机构 · 券类管理系统</p>
+          <p style="color:var(--ink-faint);font-size:.8rem;margin-top:6px;letter-spacing:.1em">泽曦书画 · 券类管理系统</p>
         </div>
         <div class="card card-pad">
           <div class="field"><label>学员姓名</label><input id="p-name" placeholder="孩子报名时登记的姓名"></div>
