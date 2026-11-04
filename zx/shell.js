@@ -60,7 +60,7 @@
   function avatarHtml(user) {
     const style = `background:var(--zx-role-${esc(user.roleType || 'admin')}, var(--zx-seal))`;
     const img = user.avatarUrl
-      ? `<img src="${esc(user.avatarUrl)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      ? `<img src="${esc(user.avatarUrl)}" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
       : '';
     return `<span class="zx-user__avatar" style="${style}">${img}<span class="zx-user__avatar-txt">${esc((user.name || '?')[0])}</span></span>`;
   }
@@ -181,7 +181,7 @@
       const roleType = (user && user.roleType) || 'admin';
       const style = `background:var(--zx-role-${roleType}, var(--zx-seal))`;
       const img = user && user.avatarUrl
-        ? `<img src="${esc(user.avatarUrl)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        ? `<img src="${esc(user.avatarUrl)}" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
         : '';
       const html = `<span class="zx-user__avatar" style="${style}">${img}<span class="zx-user__avatar-txt">${esc(name[0])}</span></span>`;
       document.querySelectorAll('.zx-topbar .zx-user__avatar, .zx-sidebar__user .zx-user__avatar').forEach((el) => {
