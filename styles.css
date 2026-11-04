@@ -56,12 +56,13 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--zx
 .seal-lg { width: 64px; height: 64px; font-size: 2rem; border-radius: 16px; }
 .seal-sm { width: 30px; height: 30px; font-size: .95rem; border-radius: 8px; }
 
-/* 真 logo 图片版（透明底印章）：继承 .seal 的尺寸，去掉文字印章的渐变/旋转 */
+/* 真 logo 图片版（透明底小狗插画）：继承 .seal 的尺寸，去掉文字印章的渐变/旋转 */
 img.seal {
   background: none; color: inherit; transform: none;
-  box-shadow: 0 2px 10px rgba(163,67,50,.28);
+  box-shadow: none;
   object-fit: contain; display: block; user-select: none;
 }
+img.seal.seal-lg { width: 88px; height: 88px; }
 
 /* ---------- 通用组件 ---------- */
 .card {

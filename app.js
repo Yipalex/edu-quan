@@ -21,6 +21,8 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
   const state = {
     user: null,      // 登录用户
     staff: null,     // 员工档案（含角色）
+    me: null,        // 当前账号资料（users 表）：{id, phone, name, role}
+    avatarUrl: null, // 当前用户头像地址
     now: null,       // 服务器时间 { dateStr, dow, mins, timeStr }
     timers: [],      // 页面级定时器
     showInactive: false, // 班级列表是否显示已停用
@@ -167,6 +169,7 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
         }
       } catch (_) { /* 无邀请则保持未授权 */ }
     }
+    loadMe()   /* 拉取账号资料（头像/手机号） */
     return state.staff
   }
 
@@ -201,12 +204,18 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
     if (zxShellReady || !state.staff) return
     zxShellReady = true
     ZXShell.init({
-      brand: { name: '泽曦书画', logo: 'img/zexi-logo.png' },
+      brand: { name: '泽曦书画', logo: 'img/zexi-logo.png?v=20261104d' },
       systems: ZX_SYSTEMS,
       currentSystem: 'quan',
       nav: QUAN_NAV,
       tabbar: ['today', 'voucher', 'admin', 'students', 'me'],
-      user: { name: state.staff.name, role: roleLabel(state.staff.role), roleType: isMgr() ? 'admin' : 'teacher' },
+      user: {
+        name: state.staff.name,
+        role: roleLabel(state.staff.role),
+        roleType: isMgr() ? 'admin' : 'teacher',
+        avatarUrl: state.avatarUrl,
+        href: '#/me',
+      },
       activeNav: '',
       onLogout: doLogout,
     })
@@ -268,7 +277,7 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
     $app.innerHTML = `
       <div class="auth-wrap">
         <div class="auth-hero">
-          <img class="seal seal-lg" src="img/zexi-logo.png" alt="泽曦书画">
+          <img class="seal seal-lg" src="img/zexi-logo.png?v=20261104d" alt="泽曦书画">
           <h1>泽曦书画</h1>
           <p>券 类 管 理 系 统</p>
         </div>
@@ -1702,9 +1711,58 @@ try { const _ssoTk = new URLSearchParams(location.search).get('tk'); if (_ssoTk)
         · 所有流水只增不改；作废需填原因并自动退回余额<br>
         · 余额不足时无法核销，需先由教务兑换充值
       </div>
+      <div id="zxProfileRoot"></div>
       <button class="btn btn-ghost btn-block" id="btn-logout" style="margin-top:16px">退出登录</button>
     `, 'me')
     document.getElementById('btn-logout').onclick = doLogout
+    renderProfileSection()
+  }
+
+  /* ==================== 个人资料（头像 / 姓名 / 手机号 / 密码） ==================== */
+  function renderProfileSection() {
+    const root = document.getElementById('zxProfileRoot')
+    if (!root || !window.ZXProfile) return
+    ZXProfile.render(root, {
+      app: 'quan',
+      token: () => localStorage.getItem('zb_token'),
+      userId: () => (state.me && state.me.id) || (state.user && state.user.id),
+      name: () => (state.me && state.me.name) || (state.staff && state.staff.name) || '',
+      phone: () => (state.me && state.me.phone) || (state.user && state.user.phone) || '',
+      roleLabel: () => roleLabel(state.staff && state.staff.role),
+      onSaved: (u) => {
+        if (u) {
+          state.me = { ...(state.me || {}), ...u }
+          if (state.staff && u.name) state.staff.name = u.name
+        }
+        refreshShellUser()
+      },
+      onAvatar: () => refreshShellUser(),
+    })
+  }
+
+  /** 刷新顶栏/侧栏用户信息（改头像/改名后调用） */
+  function refreshShellUser() {
+    if (!window.ZXShell || !zxShellReady) return
+    ZXShell.setUser({
+      name: (state.me && state.me.name) || (state.staff && state.staff.name) || '',
+      role: roleLabel(state.staff && state.staff.role),
+      roleType: isMgr() ? 'admin' : 'teacher',
+      avatarUrl: state.avatarUrl,
+    })
+  }
+
+  /** 拉取当前账号资料（含头像地址） */
+  async function loadMe() {
+    try {
+      const token = localStorage.getItem('zb_token')
+      const r = await fetch('/api/quan/auth/profile', { headers: { Authorization: 'Bearer ' + token } })
+      const d = await r.json()
+      if (d && d.user) {
+        state.me = d.user
+        state.avatarUrl = d.user.avatar_url || null
+        refreshShellUser()
+      }
+    } catch (e) { /* 忽略 */ }
   }
 
   /* ==================== 视图：家长查询 ==================== */

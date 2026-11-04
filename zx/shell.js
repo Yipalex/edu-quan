@@ -56,6 +56,15 @@
     })).filter((g) => g.items.length);
   }
 
+  /** 用户头像（圆形）：有头像图则显示图片，失败回退到名字首字 */
+  function avatarHtml(user) {
+    const style = `background:var(--zx-role-${esc(user.roleType || 'admin')}, var(--zx-seal))`;
+    const img = user.avatarUrl
+      ? `<img src="${esc(user.avatarUrl)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      : '';
+    return `<span class="zx-user__avatar" style="${style}">${img}<span class="zx-user__avatar-txt">${esc((user.name || '?')[0])}</span></span>`;
+  }
+
   function renderTopbar(cfg) {
     const bar = document.createElement('header');
     bar.className = 'zx-topbar';
@@ -78,8 +87,8 @@
         </div>
       </div>` : ''}
       <button class="zx-icon-btn" type="button" aria-label="通知">${icon('bell')}${cfg.notices ? `<span class="zx-icon-btn__badge">${cfg.notices}</span>` : ''}</button>
-      <button class="zx-user" type="button">
-        <span class="zx-user__avatar" style="background:var(--zx-role-${esc(cfg.user.roleType || 'admin')}, var(--zx-seal))">${esc((cfg.user.name || '?')[0])}</span>
+      <button class="zx-user" type="button"${cfg.user.href ? ` onclick="location.hash='${esc(cfg.user.href)}'"` : ''}>
+        ${avatarHtml(cfg.user)}
         <span class="zx-user__name">${esc(cfg.user.name)}</span>
         <span class="zx-user__role">· ${esc(cfg.user.role)}</span>
       </button>`;
@@ -100,7 +109,7 @@
           </a>`).join('')}
       </nav>`).join('') + `
       <div class="zx-sidebar__user">
-        <span class="zx-user__avatar" style="background:var(--zx-role-${esc(cfg.user.roleType || 'admin')}, var(--zx-seal))">${esc((cfg.user.name || '?')[0])}</span>
+        ${avatarHtml(cfg.user)}
         <span><span class="zx-sidebar__user-name">${esc(cfg.user.name)}</span><br><span class="zx-sidebar__user-role">${esc(cfg.user.role)}</span></span>
         <button class="zx-sidebar__logout" type="button" title="退出登录" data-zx-logout>${icon('logout')}</button>
       </div>`;
@@ -164,6 +173,24 @@
       if (out && cfg.onLogout) out.addEventListener('click', cfg.onLogout);
 
       return { sidebar, main };
+    },
+
+    /* 更新顶栏/侧栏用户信息（头像、姓名、角色） */
+    setUser(user) {
+      const name = user && user.name ? user.name : '?';
+      const roleType = (user && user.roleType) || 'admin';
+      const style = `background:var(--zx-role-${roleType}, var(--zx-seal))`;
+      const img = user && user.avatarUrl
+        ? `<img src="${esc(user.avatarUrl)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        : '';
+      const html = `<span class="zx-user__avatar" style="${style}">${img}<span class="zx-user__avatar-txt">${esc(name[0])}</span></span>`;
+      document.querySelectorAll('.zx-topbar .zx-user__avatar, .zx-sidebar__user .zx-user__avatar').forEach((el) => {
+        el.outerHTML = html;
+      });
+      const nm = document.querySelector('.zx-topbar .zx-user__name');
+      if (nm && user) nm.textContent = name;
+      const rl = document.querySelector('.zx-topbar .zx-user__role');
+      if (rl && user && user.role) rl.textContent = '· ' + user.role;
     },
 
     /* 徽标动态更新 */

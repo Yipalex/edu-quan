@@ -1,0 +1,163 @@
+/* ============================================================
+ * 个人资料页样式（2026-11-04）—— yj / quan / zc 共用
+ * 头像统一圆形（border-radius:50% + overflow:hidden），头像下方显示名字。
+ * ============================================================ */
+
+/* ---- 圆形头像通用组件 ---- */
+.zx-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--zx-seal, #A34332);
+  color: #fff;
+  font-weight: 600;
+  flex: none;
+  user-select: none;
+  vertical-align: middle;
+}
+.zx-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+}
+/* 图片加载失败 → 显示文字首字 */
+.zx-avatar.is-fallback .zx-avatar__txt { display: block; }
+.zx-avatar__txt {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.zx-avatar:not(:has(img)) .zx-avatar__txt { display: flex; }
+
+/* 头像 + 名字（头像下方显示名字） */
+.zx-avatar-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.zx-avatar-name {
+  font-size: 13px;
+  color: var(--zx-ink, #25231F);
+  font-weight: 600;
+}
+
+/* ---- 个人资料页布局 ---- */
+.zx-profile { max-width: 560px; margin: 0 auto; }
+
+.zx-profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 20px 24px;
+  text-align: center;
+}
+.zx-profile-hero .zx-avatar {
+  width: 96px !important;
+  height: 96px !important;
+  font-size: 38px !important;
+  box-shadow: 0 6px 20px rgba(163, 67, 50, 0.22);
+  border: 3px solid #fff;
+}
+.zx-profile-hero .zx-avatar-name { font-size: 18px; }
+.zx-profile-role {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: var(--zx-seal-soft, rgba(176, 58, 42, 0.08));
+  color: var(--zx-seal, #A34332);
+  border: 1px solid rgba(176, 58, 42, 0.2);
+}
+
+/* 头像操作区 */
+.zx-profile-avatar-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* 表单区块 */
+.zx-profile-card {
+  background: var(--zx-card, #fff);
+  border: 1px solid var(--zx-line, #E5E0D6);
+  border-radius: var(--zx-radius-card, 12px);
+  padding: 18px 20px;
+  margin-top: 14px;
+}
+.zx-profile-card h3 {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-family: var(--zx-font-display, serif);
+  color: var(--zx-ink, #25231F);
+}
+.zx-profile-field { margin-bottom: 14px; }
+.zx-profile-field:last-child { margin-bottom: 0; }
+.zx-profile-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--zx-ink-2, #6B675E);
+}
+.zx-profile-field input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--zx-line, #E5E0D6);
+  border-radius: var(--zx-radius-ctrl, 8px);
+  background: var(--zx-card, #fff);
+  color: var(--zx-ink, #25231F);
+  font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.zx-profile-field input:focus {
+  outline: none;
+  border-color: var(--zx-seal, #A34332);
+  box-shadow: 0 0 0 3px rgba(163, 67, 50, 0.12);
+}
+.zx-profile-field .zx-profile-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--zx-ink-3, #9A958A);
+  line-height: 1.6;
+}
+.zx-profile-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.zx-profile-btn {
+  padding: 10px 20px;
+  border-radius: var(--zx-radius-ctrl, 8px);
+  border: 1px solid var(--zx-line, #E5E0D6);
+  background: var(--zx-card, #fff);
+  color: var(--zx-ink, #25231F);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.zx-profile-btn:hover { border-color: var(--zx-seal, #A34332); color: var(--zx-seal, #A34332); }
+.zx-profile-btn--primary {
+  background: var(--zx-seal, #A34332);
+  border-color: var(--zx-seal, #A34332);
+  color: #fff;
+}
+.zx-profile-btn--primary:hover { opacity: 0.9; color: #fff; }
+.zx-profile-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@media (max-width: 560px) {
+  .zx-profile-hero { padding: 20px 12px 18px; }
+  .zx-profile-card { padding: 16px 14px; }
+}
