@@ -168,7 +168,8 @@
       file.onchange = function () {
         var f = file.files && file.files[0];
         if (!f) return;
-        ZXAvatar.process(f).then(function (blob) {
+        ZXAvatar.crop(f).then(function (blob) {
+          if (!blob) return; // 用户取消裁剪
           pick.disabled = true;
           pick.textContent = '上传中…';
           return doUpload(cfg, blob).then(function (res) {
